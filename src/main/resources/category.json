@@ -1,1 +1,49 @@
-[]
+[ {
+  "id" : "dee6b73e-00f2-4670-a0cb-0979046f65ad",
+  "createdDate" : "2025-06-15T19:48:48.753105600Z",
+  "createdBy" : "09fbd61a-eff3-4f81-96ee-5c79efbd64a7",
+  "active" : true,
+  "name" : "elektronika",
+  "parentId" : null,
+  "lastCategory" : false
+}, {
+  "id" : "4480d41c-c705-4ad4-8747-c55ed835acad",
+  "createdDate" : "2025-06-15T19:49:51.679014800Z",
+  "createdBy" : "09fbd61a-eff3-4f81-96ee-5c79efbd64a7",
+  "active" : true,
+  "name" : "Telefonlar",
+  "parentId" : "dee6b73e-00f2-4670-a0cb-0979046f65ad",
+  "lastCategory" : false
+}, {
+  "id" : "13d4cba9-0829-4aee-a043-1f9ecf44cedb",
+  "createdDate" : "2025-06-15T20:01:10.150186700Z",
+  "createdBy" : "09fbd61a-eff3-4f81-96ee-5c79efbd64a7",
+  "active" : true,
+  "name" : "Samsung",
+  "parentId" : "4480d41c-c705-4ad4-8747-c55ed835acad",
+  "lastCategory" : false
+}, {
+  "id" : "b0554023-de5e-4091-b171-096f4b80874d",
+  "createdDate" : "2025-06-15T20:01:56.325128400Z",
+  "createdBy" : "09fbd61a-eff3-4f81-96ee-5c79efbd64a7",
+  "active" : true,
+  "name" : "S rusumli",
+  "parentId" : "13d4cba9-0829-4aee-a043-1f9ecf44cedb",
+  "lastCategory" : true
+}, {
+  "id" : "2b40fe4d-bb45-4d03-b15f-da2e50b9c391",
+  "createdDate" : "2025-06-15T20:02:27.043250Z",
+  "createdBy" : "09fbd61a-eff3-4f81-96ee-5c79efbd64a7",
+  "active" : true,
+  "name" : "IPhone",
+  "parentId" : "4480d41c-c705-4ad4-8747-c55ed835acad",
+  "lastCategory" : true
+}, {
+  "id" : "79cf5634-d10b-4633-8207-3b183de0f14d",
+  "createdDate" : "2025-06-15T20:02:50.145816800Z",
+  "createdBy" : "09fbd61a-eff3-4f81-96ee-5c79efbd64a7",
+  "active" : true,
+  "name" : "Note Rusumli",
+  "parentId" : "13d4cba9-0829-4aee-a043-1f9ecf44cedb",
+  "lastCategory" : true
+} ]

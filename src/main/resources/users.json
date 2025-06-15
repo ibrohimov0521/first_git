@@ -6,4 +6,12 @@
   "userName" : "admin",
   "password" : "admin",
   "role" : "ADMIN"
+}, {
+  "id" : "2ee56962-4f50-43be-a515-3df3c4761d9a",
+  "createdDate" : "2025-06-15T19:39:38.185587800Z",
+  "createdBy" : null,
+  "active" : true,
+  "userName" : "111",
+  "password" : "111",
+  "role" : "USER"
 } ]

@@ -7,7 +7,6 @@ import uz.shop.model.User;
 import uz.shop.role.Role;
 
 import java.io.File;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -32,7 +31,7 @@ public class UserService implements BaseService<User> {
     public User findById(UUID id) {
         rewrite();
         for (User user : users) {
-            if (user.getId().equals(id)) {
+            if ( user.getId().equals(id)) {
                 return user;
             }
         }

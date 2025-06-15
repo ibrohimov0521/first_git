@@ -18,10 +18,10 @@ public class Main {
     public static BillService billService = new BillService();
 
     public static void main(String[] args) {
-
+        menu();
     }
 
-    public void menu() {
+    public static void menu() {
         int option = 100;
         while (option != 0) {
             System.out.println("\n\tWelcome to the Shop System\n");
@@ -32,14 +32,12 @@ public class Main {
                     """);
             option = sc.nextInt();
             switch (option) {
-                case 1 -> {
-                    registerUser();
-                }
+                case 1 -> registerUser();
                 case 2 -> {
                     if (login()) {
                         System.out.println("Logged in successfully\n");
                         if (currentUser.getRole().equals(Role.ADMIN)) {
-
+                            adminMenu();
                         } else {
                             userMenu();
                         }
@@ -50,7 +48,7 @@ public class Main {
         }
     }
 
-    public void registerUser() {
+    public static void registerUser() {
         User newUser = new User();
         System.out.println("Enter username: ");
         newUser.setUserName(scStr.nextLine());
@@ -65,7 +63,7 @@ public class Main {
         System.out.println("Passwords do not match");
     }
 
-    public boolean login() {
+    public static boolean login() {
         System.out.println("Enter username: ");
         String username = scStr.nextLine();
         System.out.println("Enter password: ");
@@ -74,7 +72,7 @@ public class Main {
         return currentUser != null;
     }
 
-    public void userMenu() {
+    public static void userMenu() {
         int option = 100;
         while (option != 0) {
             System.out.println(currentUser.getUserName() + " Welcome to the Shop System\n");
@@ -90,30 +88,30 @@ public class Main {
                     int i = 1;
                     List<Category> categories = categoryService.findNonParent();
                     for (Category category : categories) {
-                        System.out.println(i + ". " + category);
+                        System.out.println(i++ + ". " + category);
                     }
                     System.out.println("Select category:        0. Exit");
                     i = sc.nextInt();
-                    if (i < 1 || i > categories.size()){
+                    if (i < 1 || i > categories.size()) {
                         return;
                     }
-                    Category category = categories.get(i);
+                    Category category = categories.get(i - 1);
                     while (!category.isLastCategory()) {
                         categories = categoryService.findAllByParentId(category.getId());
                         for (Category c : categories) {
-                            System.out.println(i + ". " + c);
+                            System.out.println(i++ + ". " + c);
                         }
                         System.out.println("Select category:        0. Exit");
                         i = sc.nextInt();
-                        if (i < 1 || i > categories.size()){
+                        if (i < 1 || i > categories.size()) {
                             return;
                         }
-                        category = categories.get(i);
+                        category = categories.get(i - 1);
                     }
                     i = 1;
                     List<Product> products = productService.findAllByCategoryId(category.getId());
                     for (Product p : products) {
-                        System.out.println(i + ". " + p.getName());
+                        System.out.println(i++ + ". " + p.getName());
                     }
                     System.out.println("Enter number of products:      0.  Exit");
                     i = sc.nextInt();
@@ -154,30 +152,163 @@ public class Main {
         }
     }
 
-    public void adminMenu() {
+    public static void adminMenu() {
         int option = 100;
         while (option != 0) {
             System.out.println(currentUser.getUserName() + " Welcome to the Shop admin System\n");
             System.out.println("""
-                    1. Catalogs
-                    2. Category's
-                    3. Products
-                    4. Users
+                    1. Category's
+                    2. Products
+                    3. Users
+                    0. Exit
+                    """);
+            option = sc.nextInt();
+            switch (option) {
+                case 1 -> categoryManu();
+                case 2 -> productManu();
+                case 3 -> {
+
+                }
+            }
+        }
+    }
+
+    public static void categoryManu() {
+        int option = 100;
+        while (option != 0) {
+            System.out.println("""
+                    1. List categories
+                    2. add categories
+                    3. delete categories
                     0. Exit
                     """);
             option = sc.nextInt();
             switch (option) {
                 case 1 -> {
-
+                    int i = 1;
+                    List<Category> categories = categoryService.findNonParent();
+                    for (Category c : categories) {
+                        System.out.println(i++ + ". " + c);
+                    }
+                    System.out.println("Select category:        0. Exit");
+                    i = sc.nextInt();
+                    if (i < 1 || i > categories.size()) {
+                        return;
+                    }
+                    Category category = categories.get(i - 1);
+                    while (!category.isLastCategory()) {
+                        categories = categoryService.findAllByParentId(category.getId());
+                        for (Category c : categories) {
+                            System.out.println(i++ + ". " + c);
+                        }
+                        System.out.println("Select category:        0. Exit");
+                        i = sc.nextInt();
+                        if (i < 1 || i > categories.size()) {
+                            return;
+                        }
+                        category = categories.get(i - 1);
+                    }
+                    i = 1;
+                    List<Product> products = productService.findAllByCategoryId(category.getId());
+                    for (Product p : products) {
+                        System.out.println(i++ + ". " + p.getName());
+                    }
+                    System.out.println("0. Exit");
+                    sc.nextLine();
                 }
                 case 2 -> {
+                    Category newCategory = new Category();
+                    newCategory.setCreatedBy(currentUser.getId());
+                    System.out.println("Enter Category Name: ");
+                    newCategory.setName(scStr.nextLine());
+                    System.out.println("""
+                            1. Is it last Category
+                            2. Is it first Category
+                            0. no
+                            """);
+                    switch (sc.nextInt()) {
+                        case 1 -> {
+                            System.out.println("Enter Name Parent Category");
+                            Category parCategory = categoryService.findName(scStr.nextLine());
+                            newCategory.setParentId(parCategory.getId());
+                            newCategory.setLastCategory(true);
+                        }
+                        case 2 -> {
+
+                        }
+                        case 0 -> {
+                            System.out.println("Enter Name Parent Category");
+                            Category parCategory = categoryService.findName(scStr.nextLine());
+                            newCategory.setParentId(parCategory.getId());
+                        }
+                    }
+                    categoryService.add(newCategory);
 
                 }
                 case 3 -> {
 
                 }
-                case 4 -> {
+            }
+        }
+    }
 
+    public static void productManu() {
+        int option = 100;
+        while (option != 0) {
+            System.out.println("""
+                    1. All product list
+                    2. Add product
+                    3. Delete product
+                    0. Exit
+                    """);
+            option = sc.nextInt();
+            switch (option) {
+                case 1 -> {
+                    List<Product> products = productService.findAll();
+                    for (Product product : products) {
+                        System.out.println(product);
+                    }
+                }
+                case 2 -> {
+                    int i = 1;
+                    List<Category> categories = categoryService.findNonParent();
+                    for (Category category : categories) {
+                        System.out.println(i++ + ". " + category);
+                    }
+                    System.out.println("Select category:        0. Exit");
+                    i = sc.nextInt();
+                    if (i < 1 || i > categories.size()) {
+                        return;
+                    }
+                    Category category = categories.get(i - 1);
+                    while (!category.isLastCategory()) {
+                        categories = categoryService.findAllByParentId(category.getId());
+                        for (Category c : categories) {
+                            System.out.println(i++ + ". " + c);
+                        }
+                        System.out.println("Select category:        0. Exit");
+                        i = sc.nextInt();
+                        if (i < 1 || i > categories.size()) {
+                            return;
+                        }
+                        category = categories.get(i - 1);
+                    }
+                    Product newProduct = new Product();
+                    System.out.println("Enter product Name: ");
+                    newProduct.setName(scStr.nextLine());
+                    System.out.println("Enter product Price");
+                    newProduct.setPrice(sc.nextDouble());
+                    System.out.println("Enter amount: ");
+                    newProduct.setAmount(sc.nextInt());
+                    System.out.println("Enter Description: ");
+                    newProduct.setDescription(scStr.nextLine());
+                    newProduct.setCreatedBy(currentUser.getId());
+                    newProduct.setCategoryId(category.getId());
+                    if (productService.add(newProduct)) {
+                        System.out.println("Successfully added!!!");
+                    } else {
+                        System.out.println("ERROR!");
+                    }
                 }
             }
         }

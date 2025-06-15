@@ -31,6 +31,16 @@ public class CategoryService implements BaseService<Category> {
         return null;
     }
 
+    public Category findName(String name) {
+        rewrite();
+        for (Category c : categories) {
+            if (c.getName().equals(name)) {
+                return c;
+            }
+        }
+        return null;
+    }
+
     public List<Category> findNonParent() {
         rewrite();
         List<Category> categories1 = new ArrayList<>();
@@ -52,12 +62,13 @@ public class CategoryService implements BaseService<Category> {
         rewrite();
         List<Category> categories = new ArrayList<>();
         for (Category c : this.categories) {
-            if (c.getParentId().equals(parentId)) {
+            if (parentId != null && parentId.equals(c.getParentId())) {
                 categories.add(c);
             }
         }
         return categories;
     }
+
 
 
     @SneakyThrows

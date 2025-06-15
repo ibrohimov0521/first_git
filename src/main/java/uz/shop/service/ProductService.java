@@ -60,7 +60,7 @@ public class ProductService implements BaseService<Product> {
         }
         products.add(product);
         mapper.writerWithDefaultPrettyPrinter().writeValue(new File("src/main/resources/products.json"), products);
-        return false;
+        return true;
     }
 
     @SneakyThrows
