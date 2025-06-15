@@ -12,7 +12,6 @@ public class Main {
     public static Scanner scStr = new Scanner(System.in);
     public static UserService userService = new UserService();
     public static User currentUser = new User();
-    public static CatalogService catalogService = new CatalogService();
     public static CategoryService categoryService = new CategoryService();
     public static ProductService productService = new ProductService();
     public static BasketService basketService = new BasketService();
@@ -88,31 +87,7 @@ public class Main {
             option = sc.nextInt();
             switch (option) {
                 case 1 -> {
-                    List<Catalog> catalogs = catalogService.findAll();
                     int i = 1;
-                    for (Catalog c : catalogs) {
-                        System.out.println(i + ". " + c.getName());
-                    }
-                    System.out.println("Enter number of catalogs:      0.  Exit");
-                    i = sc.nextInt();
-                    if (i > catalogs.size() || i < 1) {
-                        return;
-                    }
-                    Catalog catalog = catalogs.get(i - 1);
-                    System.out.println("\n\t" + catalog.getName());
-                    List<Category> categories = categoryService.findAllByCatalogId(catalog.getId());
-                    i = 1;
-                    for (Category c : categories) {
-                        System.out.println(i + ". " + c.getName());
-                    }
-                    System.out.println("Enter number of categories:      0.  Exit");
-                    i = sc.nextInt();
-                    if (i > categories.size() || i < 1) {
-                        return;
-                    }
-                    Category category = categories.get(i - 1);
-                    System.out.println("\n\t" + category.getName());
-                    List<Product> products = productService.findAllByCategoryId(category.getId());
                     i = 1;
                     for (Product p : products) {
                         System.out.println(i + ". " + p.getName());
