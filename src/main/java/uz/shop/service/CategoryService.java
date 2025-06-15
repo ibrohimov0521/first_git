@@ -31,17 +31,28 @@ public class CategoryService implements BaseService<Category> {
         return null;
     }
 
+    public List<Category> findNonParent() {
+        rewrite();
+        List<Category> categories1 = new ArrayList<>();
+        for (Category c : categories) {
+            if (c.getParentId() == null) {
+                categories1.add(c);
+            }
+        }
+        return categories1;
+    }
+
     @Override
     public List<Category> findAll() {
         rewrite();
         return categories;
     }
 
-    public List<Category> findAllByCatalogId(UUID catalogId) {
+    public List<Category> findAllByParentId(UUID parentId) {
         rewrite();
         List<Category> categories = new ArrayList<>();
         for (Category c : this.categories) {
-            if (c.getCatalogId().equals(catalogId)) {
+            if (c.getParentId().equals(parentId)) {
                 categories.add(c);
             }
         }

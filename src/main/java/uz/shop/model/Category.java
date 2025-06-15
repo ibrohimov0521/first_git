@@ -9,5 +9,6 @@ import java.util.UUID;
 @Data
 public class Category extends Base {
     private String name;
-    private UUID catalogId;
+    private UUID parentId;
+    private boolean lastCategory;
 }

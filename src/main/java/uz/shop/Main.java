@@ -88,6 +88,28 @@ public class Main {
             switch (option) {
                 case 1 -> {
                     int i = 1;
+                    List<Category> categories = categoryService.findNonParent();
+                    for (Category category : categories) {
+                        System.out.println(i + ". " + category);
+                    }
+                    System.out.println("Select category:        0. Exit");
+                    i = sc.nextInt();
+                    if (i < 1 || i > categories.size()){
+                        return;
+                    }
+                    Category category = categories.get(i);
+                    while (!category.isLastCategory()) {
+                        categories = categoryService.findAllByParentId(category.getId());
+                        for (Category c : categories) {
+                            System.out.println(i + ". " + c);
+                        }
+                        System.out.println("Select category:        0. Exit");
+                        i = sc.nextInt();
+                        if (i < 1 || i > categories.size()){
+                            return;
+                        }
+                        category = categories.get(i);
+                    }
                     i = 1;
                     for (Product p : products) {
                         System.out.println(i + ". " + p.getName());
