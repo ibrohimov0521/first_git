@@ -111,6 +111,7 @@ public class Main {
                         category = categories.get(i);
                     }
                     i = 1;
+                    List<Product> products = productService.findAllByCategoryId(category.getId());
                     for (Product p : products) {
                         System.out.println(i + ". " + p.getName());
                     }
