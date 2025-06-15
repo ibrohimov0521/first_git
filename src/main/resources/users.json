@@ -1,0 +1,9 @@
+[ {
+  "id" : "09fbd61a-eff3-4f81-96ee-5c79efbd64a7",
+  "createdDate" : "2025-06-14T13:20:11.602517600Z",
+  "createdBy" : null,
+  "active" : true,
+  "userName" : "admin",
+  "password" : "admin",
+  "role" : "ADMIN"
+} ]
