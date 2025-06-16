@@ -28,4 +28,14 @@
   "price" : 1200.0,
   "amount" : 20,
   "description" : "12/1 nb"
+}, {
+  "id" : "c93d17b7-2e1a-4026-81d9-d7c3063a5863",
+  "createdDate" : "2025-06-16T14:26:17.156243100Z",
+  "createdBy" : "09fbd61a-eff3-4f81-96ee-5c79efbd64a7",
+  "active" : true,
+  "name" : "acer 1",
+  "categoryId" : "80eb369d-90d5-4c46-9182-cd69f7adbab9",
+  "price" : 500.0,
+  "amount" : 2,
+  "description" : "16/1tb"
 } ]

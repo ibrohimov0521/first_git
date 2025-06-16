@@ -6,4 +6,12 @@
   "userId" : "2ee56962-4f50-43be-a515-3df3c4761d9a",
   "productId" : "77001326-cfb7-4d31-ac4d-396af1a8313d",
   "amount" : 2
+}, {
+  "id" : "a0a65daa-020f-42a5-bbe4-2e8115173b1b",
+  "createdDate" : "2025-06-16T14:29:00.153705200Z",
+  "createdBy" : "2ee56962-4f50-43be-a515-3df3c4761d9a",
+  "active" : true,
+  "userId" : "2ee56962-4f50-43be-a515-3df3c4761d9a",
+  "productId" : "c93d17b7-2e1a-4026-81d9-d7c3063a5863",
+  "amount" : 1
 } ]

@@ -246,7 +246,7 @@ public class Main {
 
                 }
                 case 3 -> {
-
+                    basketMenu();
                 }
             }
         }
@@ -312,5 +312,9 @@ public class Main {
                 }
             }
         }
+    }
+
+    public static void basketMenu (){
+        System.out.println("asasd");
     }
 }
