@@ -1,0 +1,72 @@
+package uz.pdp.service;
+
+import uz.pdp.model.User;
+
+import java.util.ArrayList;
+
+public class UserService {
+    private ArrayList<User> users = JsonUtil.readFromFile("users.json", User.class);
+
+    public void save() {
+        JsonUtil.writeToFile("users.json", users);
+    }
+
+    public void registerUser(String username, String password, String role) {
+        for (User user : users) {
+            if (user.getUsername().equals(username) || user.getPassword().equals(password)) {
+                System.out.println("Username already taken");
+                return;
+            }
+        }
+
+        users.add(new User(username, password, role));
+        save();
+        System.out.println("User registered successfully");
+    }
+
+    public User login(String username, String password) {
+        for (User user : users) {
+            if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
+                System.out.println("Login successful");
+                return user;
+            }
+        }
+        System.out.println("Invalid credentials or blocked");
+        return null;
+    }
+
+    public void seeUsers() {
+        for (User user : users) {
+            System.out.println(user);
+        }
+    }
+
+    public boolean userToAdmin(String username) {
+        User user = getUserByUsername(username);
+        if (user != null) {
+            user.setRole("ADMIN");
+            save();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean userToCashier(String username) {
+        User user = getUserByUsername(username);
+        if (user != null) {
+            user.setRole("CASHIER");
+            save();
+            return true;
+        }
+        return false;
+    }
+
+    public User getUserByUsername(String username) {
+        for (User user : users) {
+            if (user.getUsername().equals(username)) {
+                return user;
+            }
+        }
+        return null;
+    }
+}
