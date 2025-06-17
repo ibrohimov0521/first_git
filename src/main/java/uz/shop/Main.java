@@ -4,7 +4,6 @@ import uz.shop.model.*;
 import uz.shop.role.Role;
 import uz.shop.service.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 

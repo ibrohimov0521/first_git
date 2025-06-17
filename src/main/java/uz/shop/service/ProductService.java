@@ -100,7 +100,9 @@ public class ProductService implements BaseService<Product> {
     public boolean deleteById (UUID id) {
         rewrite();
         for (Product product : products) {
-            product.setActive(false);
+            if (product.getId().equals(id)){
+                product.setActive(false);
+            }
         }
         mapper.writerWithDefaultPrettyPrinter().writeValue(new File("src/main/resources/products.json"), products);
         return true;
