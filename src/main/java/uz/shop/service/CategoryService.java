@@ -24,7 +24,7 @@ public class CategoryService implements BaseService<Category> {
     public Category findById(UUID id) {
         rewrite();
         for (Category c : categories) {
-            if (c.getId().equals(id)) {
+            if (c.isActive() && c.getId().equals(id)) {
                 return c;
             }
         }
@@ -34,7 +34,7 @@ public class CategoryService implements BaseService<Category> {
     public Category findName(String name) {
         rewrite();
         for (Category c : categories) {
-            if (c.getName().equals(name)) {
+            if (c.isActive() && c.getName().equals(name)) {
                 return c;
             }
         }
@@ -45,7 +45,7 @@ public class CategoryService implements BaseService<Category> {
         rewrite();
         List<Category> categories1 = new ArrayList<>();
         for (Category c : categories) {
-            if (c.getParentId() == null) {
+            if (c.isActive() && c.getParentId() == null) {
                 categories1.add(c);
             }
         }
@@ -62,7 +62,7 @@ public class CategoryService implements BaseService<Category> {
         rewrite();
         List<Category> categories = new ArrayList<>();
         for (Category c : this.categories) {
-            if (parentId != null && parentId.equals(c.getParentId())) {
+            if ( c.isActive() && parentId != null && parentId.equals(c.getParentId())) {
                 categories.add(c);
             }
         }
@@ -85,8 +85,20 @@ public class CategoryService implements BaseService<Category> {
         return true;
     }
 
+    @SneakyThrows
     @Override
     public boolean update(Category category, UUID id) {
+        rewrite();
+        for (Category c : categories) {
+            if (c.isActive() && c.getId().equals(id)){
+                c.setName(category.getName());
+                c.setLastCategory(category.isLastCategory());
+                c.setParentId(category.getParentId());
+                c.setActive(category.isActive());
+                mapper.writerWithDefaultPrettyPrinter().writeValue(new File("src/main/resources/category.json"), categories);
+                return true;
+            }
+        }
         return false;
     }
 
