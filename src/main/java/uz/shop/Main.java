@@ -104,9 +104,10 @@ public class Main {
                         System.out.println("Select category:        0. Exit");
                         i = sc.nextInt();
                         if (i < 1 || i > categories.size()) {
-                            return;
+                            category = categoryService.findById(category.getParentId());
+                        } else {
+                            category = categories.get(i - 1);
                         }
-                        category = categories.get(i - 1);
                     }
                     i = 1;
                     List<Product> products = productService.findAllByCategoryId(category.getId());
@@ -144,9 +145,7 @@ public class Main {
                     bills.reversed();
                     for (Bill b : bills) System.out.println(i + ". " + b);
                 }
-                case 3 -> {
-
-                }
+                case 3 -> basketMenu();
             }
 
         }
@@ -204,9 +203,10 @@ public class Main {
                         System.out.println("Select category:        0. Exit");
                         i = sc.nextInt();
                         if (i < 1 || i > categories.size()) {
-                            return;
+                            category = categoryService.findById(category.getParentId());
+                        } else {
+                            category = categories.get(i - 1);
                         }
-                        category = categories.get(i - 1);
                     }
                     i = 1;
                     List<Product> products = productService.findAllByCategoryId(category.getId());
@@ -246,7 +246,7 @@ public class Main {
 
                 }
                 case 3 -> {
-                    basketMenu();
+
                 }
             }
         }
@@ -289,9 +289,10 @@ public class Main {
                         System.out.println("Select category:        0. Exit");
                         i = sc.nextInt();
                         if (i < 1 || i > categories.size()) {
-                            return;
+                            category = categoryService.findById(category.getParentId());
+                        } else {
+                            category = categories.get(i - 1);
                         }
-                        category = categories.get(i - 1);
                     }
                     Product newProduct = new Product();
                     System.out.println("Enter product Name: ");
@@ -314,7 +315,40 @@ public class Main {
         }
     }
 
-    public static void basketMenu (){
-        System.out.println("asasd");
+    public static void basketMenu() {
+        int option = 100;
+        while (option != 0) {
+            List<Basket> baskets = basketService.findByUserId(currentUser.getId());
+            int i=1;
+            double price =0;
+            for (Basket basket : baskets) {
+                price += productService.findById(basket.getProductId()).getPrice();
+                System.out.println(i++ + ". " + basket);
+            }
+            System.out.println("Umumiy summa: " + price + """
+                    1. Xarid qilish
+                    0. Hammasini o'chirish
+                    """);
+            option = sc.nextInt();
+            switch (option) {
+                case 1 -> {
+                    for (Basket basket : baskets) {
+                        Bill bill = new Bill();
+                        bill.setAmount(basket.getAmount());
+                        bill.setProductId(basket.getProductId());
+                        bill.setUserId(basket.getUserId());
+                        if (billService.add(bill)) {
+                            basketService.delete(basket.getId());
+                        }
+                    }
+                }
+                case 0 -> {
+                    for (Basket basket : baskets) {
+                        basketService.delete(basket.getId());
+                    }
+                }
+
+            }
+        }
     }
 }

@@ -25,20 +25,21 @@ public class BasketService implements BaseService<Basket> {
         return null;
     }
 
-    public List<Basket> findByUserId(UUID id) {
+    @Override
+    public List<Basket> findAll() {
         rewrite();
-        List<Basket> baskets = new ArrayList<>();
-        for (Basket basket : this.baskets) {
-            if (basket.getUserId().equals(id) && basket.isActive()) {
-                baskets.add(basket);
-            }
-        }
         return baskets;
     }
 
-    @Override
-    public List<Basket> findAll() {
-        return List.of();
+    public List<Basket> findByUserId(UUID userId) {
+        rewrite();
+        List<Basket> baskets1 =  new ArrayList<>();
+        for (Basket b : this.baskets) {
+            if (b.isActive() && b.getUserId().equals(userId)){
+                baskets1.add(b);
+            }
+        }
+        return baskets1;
     }
 
     @SneakyThrows
@@ -60,6 +61,17 @@ public class BasketService implements BaseService<Basket> {
     @Override
     public boolean update(Basket basket, UUID id) {
         return false;
+    }
+
+    public void delete (UUID id) {
+        rewrite();
+        for (Basket basket : baskets) {
+            if (basket.getId().equals(id)){
+                basket.setActive(false);
+                rewrite();
+                return;
+            }
+        }
     }
 
     @SneakyThrows
