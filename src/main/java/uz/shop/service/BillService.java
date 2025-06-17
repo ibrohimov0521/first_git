@@ -14,6 +14,7 @@ import java.util.UUID;
 
 public class BillService implements BaseService<Bill> {
     ObjectMapper mapper = new ObjectMapper();
+    File file = new File("src/main/resources/bills.json");
     private List<Bill> bills;
 
     public BillService() {
@@ -54,7 +55,7 @@ public class BillService implements BaseService<Bill> {
     public boolean add(Bill bill) {
         rewrite();
         bills.add(bill);
-        mapper.writerWithDefaultPrettyPrinter().writeValue(new File("src/main/resources/bills.json"), bills);
+        mapper.writerWithDefaultPrettyPrinter().writeValue(file, bills);
         return true;
     }
 
@@ -66,7 +67,6 @@ public class BillService implements BaseService<Bill> {
     @SneakyThrows
     @Override
     public void rewrite() {
-        File file = new File("src/main/resources/bills.json");
         if (!file.exists() || file.length() == 0) {
             Files.writeString(file.toPath(), "[]");
         }

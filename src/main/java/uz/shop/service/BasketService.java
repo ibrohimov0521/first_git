@@ -13,6 +13,7 @@ import java.util.UUID;
 
 public class BasketService implements BaseService<Basket> {
     ObjectMapper mapper = new ObjectMapper();
+    File file = new File("src/main/resources/baskets.json");
     private List<Basket> baskets;
 
     public BasketService() {
@@ -49,12 +50,12 @@ public class BasketService implements BaseService<Basket> {
         for (Basket b : baskets) {
             if (b.getProductId().equals(basket.getProductId()) && b.isActive()) {
                 b.setAmount(b.getAmount() + basket.getAmount());
-                mapper.writerWithDefaultPrettyPrinter().writeValue(new File("src/main/resources/baskets.json"), baskets);
+                mapper.writerWithDefaultPrettyPrinter().writeValue(file, baskets);
                 return true;
             }
         }
         baskets.add(basket);
-        mapper.writerWithDefaultPrettyPrinter().writeValue(new File("src/main/resources/baskets.json"), baskets);
+        mapper.writerWithDefaultPrettyPrinter().writeValue(file, baskets);
         return true;
     }
 
@@ -71,13 +72,12 @@ public class BasketService implements BaseService<Basket> {
                 basket.setActive(false);
             }
         }
-        mapper.writerWithDefaultPrettyPrinter().writeValue(new File("src/main/resources/baskets.json"), baskets);
+        mapper.writerWithDefaultPrettyPrinter().writeValue(file, baskets);
     }
 
     @SneakyThrows
     @Override
     public void rewrite() {
-        File file = new File("src/main/resources/baskets.json");
         if (file.length() == 0) {
             Files.writeString(file.toPath(), "[]");
         }

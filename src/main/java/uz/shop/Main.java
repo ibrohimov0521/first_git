@@ -148,7 +148,6 @@ public class Main {
                 }
                 case 3 -> basketMenu();
             }
-
         }
     }
 
@@ -228,7 +227,7 @@ public class Main {
                     newCategory.setName(scStr.nextLine());
                     System.out.println("""
                             1. Is it last Category
-                            2. Is it first Category
+                            2. Is it Catalog
                             0. no
                             """);
                     switch (sc.nextInt()) {
@@ -239,7 +238,6 @@ public class Main {
                             newCategory.setLastCategory(true);
                         }
                         case 2 -> {
-
                         }
                         case 0 -> {
                             System.out.println("Enter Name Parent Category");
@@ -248,10 +246,16 @@ public class Main {
                         }
                     }
                     categoryService.add(newCategory);
-
                 }
                 case 3 -> {
-
+                    System.out.println("Enter category name: ");
+                    Category category = categoryService.findName(scStr.nextLine());
+                    category.setActive(false);
+                    if (categoryService.update(category, category.getId())){
+                        System.out.println("Deleted!!");
+                    } else {
+                        System.out.println("Error!!");
+                    }
                 }
             }
         }
@@ -363,7 +367,6 @@ public class Main {
                         basketService.delete(basket.getId());
                     }
                 }
-
             }
         }
     }

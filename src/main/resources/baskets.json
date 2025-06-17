@@ -22,4 +22,20 @@
   "userId" : "2ee56962-4f50-43be-a515-3df3c4761d9a",
   "productId" : "845c24fe-5822-4a07-ae5c-3abe6efcfde6",
   "amount" : 5
+}, {
+  "id" : "43441b07-5a98-4a3e-8696-f21f9a00158e",
+  "createdDate" : "2025-06-17T16:27:25.475270300Z",
+  "createdBy" : "979b7603-5b9c-4dd2-9265-1f70280eec18",
+  "active" : false,
+  "userId" : "979b7603-5b9c-4dd2-9265-1f70280eec18",
+  "productId" : "845c24fe-5822-4a07-ae5c-3abe6efcfde6",
+  "amount" : 2
+}, {
+  "id" : "ad592890-9e5a-4d92-a02c-19d04e27f248",
+  "createdDate" : "2025-06-17T16:27:43.473922Z",
+  "createdBy" : "979b7603-5b9c-4dd2-9265-1f70280eec18",
+  "active" : false,
+  "userId" : "979b7603-5b9c-4dd2-9265-1f70280eec18",
+  "productId" : "77001326-cfb7-4d31-ac4d-396af1a8313d",
+  "amount" : 1
 } ]

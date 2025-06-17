@@ -13,6 +13,7 @@ import java.util.UUID;
 
 public class CategoryService implements BaseService<Category> {
     ObjectMapper mapper = new ObjectMapper();
+    File file = new File("src/main/resources/category.json");
     private List<Category> categories;
 
     public CategoryService() {
@@ -81,7 +82,7 @@ public class CategoryService implements BaseService<Category> {
             }
         }
         categories.add(category);
-        mapper.writerWithDefaultPrettyPrinter().writeValue(new File("src/main/resources/category.json"), categories);
+        mapper.writerWithDefaultPrettyPrinter().writeValue(file, categories);
         return true;
     }
 
@@ -95,7 +96,7 @@ public class CategoryService implements BaseService<Category> {
                 c.setLastCategory(category.isLastCategory());
                 c.setParentId(category.getParentId());
                 c.setActive(category.isActive());
-                mapper.writerWithDefaultPrettyPrinter().writeValue(new File("src/main/resources/category.json"), categories);
+                mapper.writerWithDefaultPrettyPrinter().writeValue(file, categories);
                 return true;
             }
         }
@@ -105,7 +106,6 @@ public class CategoryService implements BaseService<Category> {
     @SneakyThrows
     @Override
     public void rewrite() {
-        File file = new File("src/main/resources/category.json");
         if (!file.exists() || file.length() == 0) {
             Files.writeString(file.toPath(), "[]");
         }

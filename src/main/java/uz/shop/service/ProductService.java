@@ -14,6 +14,7 @@ import java.util.UUID;
 public class ProductService implements BaseService<Product> {
 
     ObjectMapper mapper = new ObjectMapper();
+    File file = new File("src/main/resources/products.json");
     private List<Product> products;
 
     public ProductService() {
@@ -75,7 +76,7 @@ public class ProductService implements BaseService<Product> {
             }
         }
         products.add(product);
-        mapper.writerWithDefaultPrettyPrinter().writeValue(new File("src/main/resources/products.json"), products);
+        mapper.writerWithDefaultPrettyPrinter().writeValue(file, products);
         return true;
     }
 
@@ -89,7 +90,7 @@ public class ProductService implements BaseService<Product> {
                 product1.setPrice(product.getPrice());
                 product1.setDescription(product.getDescription());
                 product1.setAmount(product.getAmount());
-                mapper.writerWithDefaultPrettyPrinter().writeValue(new File("src/main/resources/products.json"), products);
+                mapper.writerWithDefaultPrettyPrinter().writeValue(file, products);
                 return true;
             }
         }
@@ -104,14 +105,13 @@ public class ProductService implements BaseService<Product> {
                 product.setActive(false);
             }
         }
-        mapper.writerWithDefaultPrettyPrinter().writeValue(new File("src/main/resources/products.json"), products);
+        mapper.writerWithDefaultPrettyPrinter().writeValue(file, products);
         return true;
     }
 
     @SneakyThrows
     @Override
     public void rewrite() {
-        File file = new File("src/main/resources/products.json");
         if (!file.exists() || file.length() == 0) {
             Files.writeString(file.toPath(), "[]");
         }
