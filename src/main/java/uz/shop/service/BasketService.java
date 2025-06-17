@@ -63,22 +63,22 @@ public class BasketService implements BaseService<Basket> {
         return false;
     }
 
+    @SneakyThrows
     public void delete (UUID id) {
         rewrite();
         for (Basket basket : baskets) {
-            if (basket.getId().equals(id)){
+            if (basket.getId().equals(id)) {
                 basket.setActive(false);
-                rewrite();
-                return;
             }
         }
+        mapper.writerWithDefaultPrettyPrinter().writeValue(new File("src/main/resources/baskets.json"), baskets);
     }
 
     @SneakyThrows
     @Override
     public void rewrite() {
         File file = new File("src/main/resources/baskets.json");
-        if (!file.exists() || file.length() == 0) {
+        if (file.length() == 0) {
             Files.writeString(file.toPath(), "[]");
         }
         baskets = mapper.readValue(file, new TypeReference<>() {
