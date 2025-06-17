@@ -4,6 +4,7 @@ import uz.shop.model.*;
 import uz.shop.role.Role;
 import uz.shop.service.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -97,6 +98,7 @@ public class Main {
                     }
                     Category category = categories.get(i - 1);
                     while (!category.isLastCategory()) {
+                        i = 1;
                         categories = categoryService.findAllByParentId(category.getId());
                         for (Category c : categories) {
                             System.out.println(i++ + ". " + c);
@@ -143,7 +145,7 @@ public class Main {
                     List<Bill> bills = billService.findByUserId(currentUser.getId());
                     int i = 1;
                     bills.reversed();
-                    for (Bill b : bills) System.out.println(i + ". " + b);
+                    for (Bill b : bills) System.out.println(i++ + ". " + b);
                 }
                 case 3 -> basketMenu();
             }
@@ -166,7 +168,10 @@ public class Main {
                 case 1 -> categoryManu();
                 case 2 -> productManu();
                 case 3 -> {
-
+                    List<User> users = userService.findAll();
+                    for (User user : users) {
+                        System.out.println(user);
+                    }
                 }
             }
         }
@@ -197,6 +202,7 @@ public class Main {
                     Category category = categories.get(i - 1);
                     while (!category.isLastCategory()) {
                         categories = categoryService.findAllByParentId(category.getId());
+                        i = 1;
                         for (Category c : categories) {
                             System.out.println(i++ + ". " + c);
                         }
@@ -283,6 +289,7 @@ public class Main {
                     Category category = categories.get(i - 1);
                     while (!category.isLastCategory()) {
                         categories = categoryService.findAllByParentId(category.getId());
+                        i = 1;
                         for (Category c : categories) {
                             System.out.println(i++ + ". " + c);
                         }
@@ -311,6 +318,13 @@ public class Main {
                         System.out.println("ERROR!");
                     }
                 }
+                case 3 -> {
+                    System.out.println("Enter product name: ");
+                    Product product = productService.findByName(scStr.nextLine());
+                    if (productService.deleteById(product.getId())) {
+                        System.out.println("Deleted!!");
+                    }
+                }
             }
         }
     }
@@ -322,12 +336,16 @@ public class Main {
             int i=1;
             double price =0;
             for (Basket basket : baskets) {
-                price += productService.findById(basket.getProductId()).getPrice();
-                System.out.println(i++ + ". " + basket);
+                if (basket.isActive()) {
+                    price += productService.findById(basket.getProductId()).getPrice();
+                    System.out.println(i++ + ". " + basket);
+                }
             }
             System.out.println("Umumiy summa: " + price + """
+                    \n
                     1. Xarid qilish
-                    0. Hammasini o'chirish
+                    2. Hammasini o'chirish
+                    0. Exit
                     """);
             option = sc.nextInt();
             switch (option) {
@@ -337,12 +355,11 @@ public class Main {
                         bill.setAmount(basket.getAmount());
                         bill.setProductId(basket.getProductId());
                         bill.setUserId(basket.getUserId());
-                        if (billService.add(bill)) {
-                            basketService.delete(basket.getId());
-                        }
+                        billService.add(bill);
+                        basketService.delete(basket.getId());
                     }
                 }
-                case 0 -> {
+                case 2 -> {
                     for (Basket basket : baskets) {
                         basketService.delete(basket.getId());
                     }

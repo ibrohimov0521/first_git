@@ -32,10 +32,26 @@ public class ProductService implements BaseService<Product> {
         return null;
     }
 
+    public Product findByName(String name) {
+        rewrite();
+        for (Product product : products) {
+            if (product.getName().equals(name)) {
+                return product;
+            }
+        }
+        return null;
+    }
+
     @Override
     public List<Product> findAll() {
         rewrite();
-        return products;
+        List<Product> products1 = new ArrayList<>();
+        for (Product product : products) {
+            if (product.isActive()){
+                products1.add(product);
+            }
+        }
+        return products1;
     }
 
     public List<Product> findAllByCategoryId(UUID categoryId) {
@@ -78,6 +94,16 @@ public class ProductService implements BaseService<Product> {
             }
         }
         return false;
+    }
+
+    @SneakyThrows
+    public boolean deleteById (UUID id) {
+        rewrite();
+        for (Product product : products) {
+            product.setActive(false);
+        }
+        mapper.writerWithDefaultPrettyPrinter().writeValue(new File("src/main/resources/products.json"), products);
+        return true;
     }
 
     @SneakyThrows
