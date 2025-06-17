@@ -13,6 +13,7 @@ import java.util.UUID;
 
 public class UserService implements BaseService<User> {
     ObjectMapper mapper = new ObjectMapper();
+    File file = new File("src/main/resources/users.json");
     private List<User> users;
 
     @SneakyThrows
@@ -54,7 +55,7 @@ public class UserService implements BaseService<User> {
             }
         }
         users.add(user);
-        mapper.writerWithDefaultPrettyPrinter().writeValue(new File("src/main/resources/users.json"), users);
+        mapper.writerWithDefaultPrettyPrinter().writeValue(file, users);
         return true;
     }
 
@@ -67,7 +68,7 @@ public class UserService implements BaseService<User> {
                 u.setUserName(user.getUserName());
                 u.setPassword(user.getPassword());
                 u.setRole(user.getRole());
-                mapper.writerWithDefaultPrettyPrinter().writeValue(new File("src/main/resources/users.json"), users);
+                mapper.writerWithDefaultPrettyPrinter().writeValue(file, users);
                 return true;
             }
         }
@@ -77,8 +78,6 @@ public class UserService implements BaseService<User> {
     @SneakyThrows
     @Override
     public void rewrite() {
-        File file = new File("src/main/resources/users.json");
-
         if (file.length() == 0) {
             this.users = new ArrayList<>();
             return;

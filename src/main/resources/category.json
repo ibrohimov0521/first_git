@@ -62,4 +62,36 @@
   "name" : "acer",
   "parentId" : "9a059268-31cc-424e-8f7a-be3892c529b4",
   "lastCategory" : true
+}, {
+  "id" : "bd560557-832e-479b-b4b8-6e9ece882d05",
+  "createdDate" : "2025-06-17T16:07:33.724223500Z",
+  "createdBy" : "09fbd61a-eff3-4f81-96ee-5c79efbd64a7",
+  "active" : true,
+  "name" : "abs",
+  "parentId" : "2b40fe4d-bb45-4d03-b15f-da2e50b9c391",
+  "lastCategory" : true
+}, {
+  "id" : "f8957bd7-1ae2-496b-9e4a-06df176999db",
+  "createdDate" : "2025-06-17T16:08:48.053130700Z",
+  "createdBy" : "09fbd61a-eff3-4f81-96ee-5c79efbd64a7",
+  "active" : false,
+  "name" : "aaaa",
+  "parentId" : null,
+  "lastCategory" : false
+}, {
+  "id" : "4ae99768-1698-404a-a753-7a878125b89e",
+  "createdDate" : "2025-06-17T16:22:34.362153500Z",
+  "createdBy" : "09fbd61a-eff3-4f81-96ee-5c79efbd64a7",
+  "active" : true,
+  "name" : "Mebel",
+  "parentId" : null,
+  "lastCategory" : false
+}, {
+  "id" : "d5347ed7-daa0-46bc-9b25-749ebb1baae5",
+  "createdDate" : "2025-06-17T16:23:27.140090400Z",
+  "createdBy" : "09fbd61a-eff3-4f81-96ee-5c79efbd64a7",
+  "active" : true,
+  "name" : "javonlar",
+  "parentId" : "4ae99768-1698-404a-a753-7a878125b89e",
+  "lastCategory" : true
 } ]

@@ -38,4 +38,14 @@
   "price" : 500.0,
   "amount" : 2,
   "description" : "16/1tb"
+}, {
+  "id" : "b405cd63-f3b3-4e8d-98cc-a2f07d9f894a",
+  "createdDate" : "2025-06-17T16:25:28.076522700Z",
+  "createdBy" : "09fbd61a-eff3-4f81-96ee-5c79efbd64a7",
+  "active" : false,
+  "name" : "stol",
+  "categoryId" : "d5347ed7-daa0-46bc-9b25-749ebb1baae5",
+  "price" : 10.0,
+  "amount" : 10,
+  "description" : "zor"
 } ]
