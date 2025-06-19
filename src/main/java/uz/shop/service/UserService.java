@@ -14,7 +14,7 @@ import java.util.UUID;
 public class UserService implements BaseService<User> {
     ObjectMapper mapper = new ObjectMapper();
     File file = new File("src/main/resources/users.json");
-    private List<User> users;
+private List<User> users;
 
     @SneakyThrows
     public UserService() {
@@ -82,7 +82,6 @@ public class UserService implements BaseService<User> {
             this.users = new ArrayList<>();
             return;
         }
-
         this.users = mapper.readValue(file, new TypeReference<>() {
         });
     }
