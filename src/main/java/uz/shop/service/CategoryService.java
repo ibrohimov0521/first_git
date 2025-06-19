@@ -84,9 +84,17 @@ public class CategoryService implements BaseService<Category> {
         mapper.writerWithDefaultPrettyPrinter().writeValue(new File("src/main/resources/category.json"), categories);
         return true;
     }
-
+    @SneakyThrows
     @Override
     public boolean update(Category category, UUID id) {
+        rewrite();
+        for (int i = 0; i < categories.size(); i++) {
+            if (categories.get(i).getId().equals(id)) {
+                categories.set(i, category);
+                mapper.writerWithDefaultPrettyPrinter().writeValue(new File("src/main/resources/category.json"), categories);
+                return true;
+            }
+        }
         return false;
     }
 
