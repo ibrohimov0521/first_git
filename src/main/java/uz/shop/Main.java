@@ -28,7 +28,7 @@ public class Main {
             System.out.println("""
                     1. Register a new user
                     2. Login a user
-                    0. Exit
+                    3. Exit
                     """);
             option = sc.nextInt();
             switch (option) {
