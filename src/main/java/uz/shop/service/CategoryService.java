@@ -99,6 +99,16 @@ public class CategoryService implements BaseService<Category> {
     }
 
     @SneakyThrows
+    public boolean delete(UUID id) {
+        rewrite();
+        boolean removed = categories.removeIf(c -> c.getId().equals(id));
+        if (removed) {
+            mapper.writerWithDefaultPrettyPrinter().writeValue(new File("src/main/resources/category.json"), categories);
+        }
+        return removed;
+    }
+
+    @SneakyThrows
     @Override
     public void rewrite() {
         File file = new File("src/main/resources/category.json");
