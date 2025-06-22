@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import uz.shop.model.User;
 import uz.shop.role.Role;
+import uz.shop.util.FileUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.UUID;
 public class UserService implements BaseService<User> {
     ObjectMapper mapper = new ObjectMapper();
     File file = new File("src/main/resources/users.json");
-private List<User> users;
+    private List<User> users;
 
     @SneakyThrows
     public UserService() {
@@ -55,7 +56,7 @@ private List<User> users;
             }
         }
         users.add(user);
-        mapper.writerWithDefaultPrettyPrinter().writeValue(file, users);
+        FileUtil.write(file,users);
         return true;
     }
 

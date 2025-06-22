@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import uz.shop.model.Bill;
+import uz.shop.util.FileUtil;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -54,7 +55,7 @@ public class BillService implements BaseService<Bill> {
     public boolean add(Bill bill) {
         rewrite();
         bills.add(bill);
-        mapper.writerWithDefaultPrettyPrinter().writeValue(file, bills);
+        FileUtil.write(file,bills);
         return true;
     }
 

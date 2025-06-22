@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import uz.shop.model.Product;
+import uz.shop.util.FileUtil;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -76,7 +77,7 @@ public class ProductService implements BaseService<Product> {
             }
         }
         products.add(product);
-        mapper.writerWithDefaultPrettyPrinter().writeValue(file, products);
+        FileUtil.write(file,products);
         return true;
     }
 
@@ -105,7 +106,7 @@ public class ProductService implements BaseService<Product> {
                 product.setActive(false);
             }
         }
-        mapper.writerWithDefaultPrettyPrinter().writeValue(file, products);
+        FileUtil.write(file,products);
         return true;
     }
 
