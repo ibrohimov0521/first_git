@@ -11,10 +11,11 @@ import java.util.UUID;
 
 public class ProductService implements BaseService<Product> {
     File file = new File("src/main/resources/products.json");
-    private final List<Product> products;
+    private List<Product> products;
 
     public ProductService() {
         products = new ArrayList<>();
+        products = FileUtil.read(file, Product.class);
 
     }
 

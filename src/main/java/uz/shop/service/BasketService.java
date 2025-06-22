@@ -11,10 +11,11 @@ import java.util.UUID;
 
 public class BasketService implements BaseService<Basket> {
     File file = new File("src/main/resources/baskets.json");
-    private final List<Basket> baskets;
+    private List<Basket> baskets;
 
     public BasketService() {
         baskets = new ArrayList<>();
+        baskets = FileUtil.read(file, Basket.class);
     }
 
     @Override

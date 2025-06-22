@@ -12,12 +12,12 @@ import java.util.UUID;
 
 public class UserService implements BaseService<User> {
     File file = new File("src/main/resources/users.json");
-    private final List<User> users;
+    private List<User> users;
 
     @SneakyThrows
     public UserService() {
         users = new ArrayList<>();
-
+        users = FileUtil.read(file, User.class);
 
         User admin = new User();
         admin.setUserName("admin");

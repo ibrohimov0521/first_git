@@ -1,23 +1,21 @@
 package uz.shop.util;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Getter;
 import lombok.SneakyThrows;
 
 import java.io.File;
 import java.util.List;
 
-public class FileUtil<T> {
-    private static final ObjectMapper objectMapper =new ObjectMapper();
+public class FileUtil {
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @SneakyThrows
-    public static <T> void write(File file, List<T> t){
-        objectMapper.writerWithDefaultPrettyPrinter().writeValue(file,t);
+    public static <T> void write(File file, List<T> list){
+        objectMapper.writerWithDefaultPrettyPrinter().writeValue(file, list);
     }
 
     @SneakyThrows
-    public static <T> List<T> read(File file){
-        return objectMapper.readValue( file, new TypeReference<>() {});
+    public static <T> List<T> read(File file, Class<T> clazz){
+        return objectMapper.readValue(file, objectMapper.getTypeFactory().constructCollectionType(List.class, clazz));
     }
 }

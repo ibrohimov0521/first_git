@@ -11,10 +11,11 @@ import java.util.UUID;
 
 public class BillService implements BaseService<Bill> {
     File file = new File("src/main/resources/bills.json");
-    private final List<Bill> bills;
+    private List<Bill> bills;
 
     public BillService() {
         bills = new ArrayList<>();
+        bills = FileUtil.read(file, Bill.class);
     }
 
     @Override

@@ -11,10 +11,11 @@ import java.util.UUID;
 
 public class CategoryService implements BaseService<Category> {
     File file = new File("src/main/resources/category.json");
-    private final List<Category> categories;
+    private List<Category> categories;
 
     public CategoryService() {
         categories = new ArrayList<>();
+        categories = FileUtil.read(file, Category.class);
     }
 
     @Override
