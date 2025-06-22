@@ -19,7 +19,6 @@ public class BasketService implements BaseService<Basket> {
 
     public BasketService() {
         baskets = new ArrayList<>();
-        rewrite();
     }
 
     @Override
@@ -29,12 +28,10 @@ public class BasketService implements BaseService<Basket> {
 
     @Override
     public List<Basket> findAll() {
-        rewrite();
         return baskets;
     }
 
     public List<Basket> findByUserId(UUID userId) {
-        rewrite();
         List<Basket> baskets1 =  new ArrayList<>();
         for (Basket b : this.baskets) {
             if (b.isActive() && b.getUserId().equals(userId)){
@@ -47,7 +44,6 @@ public class BasketService implements BaseService<Basket> {
     @SneakyThrows
     @Override
     public boolean add(Basket basket) {
-        rewrite();
         for (Basket b : baskets) {
             if (b.getProductId().equals(basket.getProductId()) && b.isActive()) {
                 b.setAmount(b.getAmount() + basket.getAmount());
@@ -67,7 +63,6 @@ public class BasketService implements BaseService<Basket> {
 
     @SneakyThrows
     public void delete (UUID id) {
-        rewrite();
         for (Basket basket : baskets) {
             if (basket.getId().equals(id)) {
                 basket.setActive(false);
@@ -76,13 +71,4 @@ public class BasketService implements BaseService<Basket> {
         mapper.writerWithDefaultPrettyPrinter().writeValue(file, baskets);
     }
 
-    @SneakyThrows
-    @Override
-    public void rewrite() {
-        if (file.length() == 0) {
-            Files.writeString(file.toPath(), "[]");
-        }
-        baskets = mapper.readValue(file, new TypeReference<>() {
-        });
-    }
 }

@@ -19,12 +19,10 @@ public class BillService implements BaseService<Bill> {
 
     public BillService() {
         bills = new ArrayList<>();
-        rewrite();
     }
 
     @Override
     public Bill findById(UUID id) {
-        rewrite();
         for (Bill b : bills) {
             if (b.getId().equals(id)) {
                 return b;
@@ -35,12 +33,11 @@ public class BillService implements BaseService<Bill> {
 
     @Override
     public List<Bill> findAll() {
-        rewrite();
         return bills;
     }
 
     public List<Bill> findByUserId(UUID userId) {
-        rewrite();
+
         List<Bill> bills = new ArrayList<>();
         for (Bill b : this.bills) {
             if (b.getUserId().equals(userId) && b.isActive()) {
@@ -53,7 +50,7 @@ public class BillService implements BaseService<Bill> {
     @SneakyThrows
     @Override
     public boolean add(Bill bill) {
-        rewrite();
+
         bills.add(bill);
         FileUtil.write(file,bills);
         return true;
@@ -64,13 +61,5 @@ public class BillService implements BaseService<Bill> {
         return false;
     }
 
-    @SneakyThrows
-    @Override
-    public void rewrite() {
-        if (!file.exists() || file.length() == 0) {
-            Files.writeString(file.toPath(), "[]");
-        }
-        bills = mapper.readValue(file, new TypeReference<>() {
-        });
-    }
+
 }

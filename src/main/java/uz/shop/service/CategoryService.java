@@ -19,12 +19,10 @@ public class CategoryService implements BaseService<Category> {
 
     public CategoryService() {
         categories = new ArrayList<>();
-        rewrite();
     }
 
     @Override
     public Category findById(UUID id) {
-        rewrite();
         for (Category c : categories) {
             if (c.isActive() && c.getId().equals(id)) {
                 return c;
@@ -34,7 +32,6 @@ public class CategoryService implements BaseService<Category> {
     }
 
     public Category findName(String name) {
-        rewrite();
         for (Category c : categories) {
             if (c.isActive() && c.getName().equals(name)) {
                 return c;
@@ -44,7 +41,6 @@ public class CategoryService implements BaseService<Category> {
     }
 
     public List<Category> findNonParent() {
-        rewrite();
         List<Category> categories1 = new ArrayList<>();
         for (Category c : categories) {
             if (c.isActive() && c.getParentId() == null) {
@@ -56,12 +52,11 @@ public class CategoryService implements BaseService<Category> {
 
     @Override
     public List<Category> findAll() {
-        rewrite();
         return categories;
     }
 
     public List<Category> findAllByParentId(UUID parentId) {
-        rewrite();
+
         List<Category> categories = new ArrayList<>();
         for (Category c : this.categories) {
             if ( c.isActive() && parentId != null && parentId.equals(c.getParentId())) {
@@ -76,7 +71,6 @@ public class CategoryService implements BaseService<Category> {
     @SneakyThrows
     @Override
     public boolean add(Category category) {
-        rewrite();
         for (Category c : categories) {
             if (c.getName().equals(category.getName())) {
                 return false;
@@ -90,7 +84,6 @@ public class CategoryService implements BaseService<Category> {
     @SneakyThrows
     @Override
     public boolean update(Category category, UUID id) {
-        rewrite();
         for (Category c : categories) {
             if (c.isActive() && c.getId().equals(id)){
                 c.setName(category.getName());
@@ -104,13 +97,4 @@ public class CategoryService implements BaseService<Category> {
         return false;
     }
 
-    @SneakyThrows
-    @Override
-    public void rewrite() {
-        if (!file.exists() || file.length() == 0) {
-            Files.writeString(file.toPath(), "[]");
-        }
-        categories = mapper.readValue(file, new TypeReference<>() {
-        });
-    }
 }
