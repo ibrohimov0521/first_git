@@ -20,12 +20,12 @@ public class ProductService implements BaseService<Product> {
 
     public ProductService() {
         products = new ArrayList<>();
-        rewrite();
+
     }
 
     @Override
     public Product findById(UUID id) {
-        rewrite();
+
         for (Product product : products) {
             if (product.getId().equals(id)) {
                 return product;
@@ -35,7 +35,7 @@ public class ProductService implements BaseService<Product> {
     }
 
     public Product findByName(String name) {
-        rewrite();
+
         for (Product product : products) {
             if (product.getName().equals(name)) {
                 return product;
@@ -46,7 +46,6 @@ public class ProductService implements BaseService<Product> {
 
     @Override
     public List<Product> findAll() {
-        rewrite();
         List<Product> products1 = new ArrayList<>();
         for (Product product : products) {
             if (product.isActive()){
@@ -57,7 +56,6 @@ public class ProductService implements BaseService<Product> {
     }
 
     public List<Product> findAllByCategoryId(UUID categoryId) {
-        rewrite();
         List<Product> products = new ArrayList<>();
         for (Product p : this.products) {
             if (p.getCategoryId().equals(categoryId) && p.isActive()) {
@@ -70,7 +68,7 @@ public class ProductService implements BaseService<Product> {
     @SneakyThrows
     @Override
     public boolean add(Product product) {
-        rewrite();
+
         for (Product product1 : products) {
             if (product1.getName().equals(product.getName()) && product1.isActive()) {
                 return false;
@@ -84,7 +82,7 @@ public class ProductService implements BaseService<Product> {
     @SneakyThrows
     @Override
     public boolean update(Product product, UUID id) {
-        rewrite();
+
         for (Product product1 : products) {
             if (product1.getId().equals(id) && product1.isActive()) {
                 product1.setName(product.getName());
@@ -100,7 +98,7 @@ public class ProductService implements BaseService<Product> {
 
     @SneakyThrows
     public boolean deleteById (UUID id) {
-        rewrite();
+
         for (Product product : products) {
             if (product.getId().equals(id)){
                 product.setActive(false);
@@ -110,13 +108,4 @@ public class ProductService implements BaseService<Product> {
         return true;
     }
 
-    @SneakyThrows
-    @Override
-    public void rewrite() {
-        if (!file.exists() || file.length() == 0) {
-            Files.writeString(file.toPath(), "[]");
-        }
-        products = mapper.readValue(file, new TypeReference<>() {
-        });
-    }
 }

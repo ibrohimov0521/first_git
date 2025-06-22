@@ -20,7 +20,7 @@ public class UserService implements BaseService<User> {
     @SneakyThrows
     public UserService() {
         users = new ArrayList<>();
-        rewrite();
+
 
         User admin = new User();
         admin.setUserName("admin");
@@ -31,7 +31,7 @@ public class UserService implements BaseService<User> {
 
     @Override
     public User findById(UUID id) {
-        rewrite();
+
         for (User user : users) {
             if ( user.getId().equals(id)) {
                 return user;
@@ -42,14 +42,13 @@ public class UserService implements BaseService<User> {
 
     @Override
     public List<User> findAll() {
-        rewrite();
         return users;
     }
 
     @SneakyThrows
     @Override
     public boolean add(User user) {
-        rewrite();
+
         for (User user1 : users) {
             if (user1.getUserName().equals(user.getUserName())) {
                 return false;
@@ -63,7 +62,7 @@ public class UserService implements BaseService<User> {
     @SneakyThrows
     @Override
     public boolean update(User user, UUID id) {
-        rewrite();
+
         for (User u : users) {
             if (u.getId().equals(id)) {
                 u.setUserName(user.getUserName());
@@ -76,19 +75,10 @@ public class UserService implements BaseService<User> {
         return false;
     }
 
-    @SneakyThrows
-    @Override
-    public void rewrite() {
-        if (file.length() == 0) {
-            this.users = new ArrayList<>();
-            return;
-        }
-        this.users = mapper.readValue(file, new TypeReference<>() {
-        });
-    }
+
 
     public User logIn (String username, String password) {
-        rewrite();
+
         for (User user : users) {
             if (user.getUserName().equals(username) && user.getPassword().equals(password)) {
                 return user;
