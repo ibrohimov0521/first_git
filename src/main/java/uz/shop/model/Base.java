@@ -12,6 +12,7 @@ public abstract class Base {
     private String createdDate;
     private UUID createdBy;
     private boolean active;
+
     public Base() {
         this.id = UUID.randomUUID();
         this.createdDate = String.valueOf(Instant.now());
