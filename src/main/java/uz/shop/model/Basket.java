@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class Basket extends Base{
+public class Basket extends Base {
     private UUID userId;
     private UUID productId;
     private int amount;
