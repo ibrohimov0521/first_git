@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import uz.shop.model.Category;
+import uz.shop.util.FileUtil;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -82,7 +83,7 @@ public class CategoryService implements BaseService<Category> {
             }
         }
         categories.add(category);
-        mapper.writerWithDefaultPrettyPrinter().writeValue(file, categories);
+        FileUtil.write(file,categories);
         return true;
     }
 
