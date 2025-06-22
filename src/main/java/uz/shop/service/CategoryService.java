@@ -1,24 +1,21 @@
 package uz.shop.service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import uz.shop.model.Category;
 import uz.shop.util.FileUtil;
 
 import java.io.File;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class CategoryService implements BaseService<Category> {
-    ObjectMapper mapper = new ObjectMapper();
     File file = new File("src/main/resources/category.json");
     private List<Category> categories;
 
     public CategoryService() {
         categories = new ArrayList<>();
+        categories = FileUtil.read(file, Category.class);
     }
 
     @Override
@@ -66,8 +63,6 @@ public class CategoryService implements BaseService<Category> {
         return categories;
     }
 
-
-
     @SneakyThrows
     @Override
     public boolean add(Category category) {
@@ -76,6 +71,7 @@ public class CategoryService implements BaseService<Category> {
                 return false;
             }
         }
+
         categories.add(category);
         FileUtil.write(file,categories);
         return true;
@@ -90,7 +86,7 @@ public class CategoryService implements BaseService<Category> {
                 c.setLastCategory(category.isLastCategory());
                 c.setParentId(category.getParentId());
                 c.setActive(category.isActive());
-                mapper.writerWithDefaultPrettyPrinter().writeValue(file, categories);
+                FileUtil.write(file,categories);
                 return true;
             }
         }

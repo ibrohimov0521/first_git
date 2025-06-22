@@ -1,7 +1,5 @@
 package uz.shop.service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import uz.shop.model.User;
 import uz.shop.role.Role;
@@ -13,14 +11,13 @@ import java.util.List;
 import java.util.UUID;
 
 public class UserService implements BaseService<User> {
-    ObjectMapper mapper = new ObjectMapper();
     File file = new File("src/main/resources/users.json");
     private List<User> users;
 
     @SneakyThrows
     public UserService() {
         users = new ArrayList<>();
-
+        users = FileUtil.read(file, User.class);
 
         User admin = new User();
         admin.setUserName("admin");
@@ -68,7 +65,7 @@ public class UserService implements BaseService<User> {
                 u.setUserName(user.getUserName());
                 u.setPassword(user.getPassword());
                 u.setRole(user.getRole());
-                mapper.writerWithDefaultPrettyPrinter().writeValue(file, users);
+                FileUtil.write(file,users);
                 return true;
             }
         }

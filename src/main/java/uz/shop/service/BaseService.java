@@ -8,5 +8,4 @@ public interface BaseService <T> {
     List<T> findAll();
     boolean add(T t);
     boolean update(T t, UUID id);
-
 }

@@ -1,24 +1,21 @@
 package uz.shop.service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import uz.shop.model.Bill;
 import uz.shop.util.FileUtil;
 
 import java.io.File;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class BillService implements BaseService<Bill> {
-    ObjectMapper mapper = new ObjectMapper();
     File file = new File("src/main/resources/bills.json");
     private List<Bill> bills;
 
     public BillService() {
         bills = new ArrayList<>();
+        bills = FileUtil.read(file, Bill.class);
     }
 
     @Override
