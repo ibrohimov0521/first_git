@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import uz.shop.model.Basket;
+import uz.shop.model.Bill;
 import uz.shop.util.FileUtil;
 
 import java.io.File;
@@ -58,6 +59,15 @@ public class BasketService implements BaseService<Basket> {
 
     @Override
     public boolean update(Basket basket, UUID id) {
+        for (Basket b : baskets) {
+            if (b != null && b.getId().equals(id) && b.isActive()) {
+                b.setAmount(basket.getAmount());
+                b.setUserId(basket.getUserId());
+                b.setProductId(basket.getProductId());
+                FileUtil.write(file,baskets);
+                return true;
+            }
+        }
         return false;
     }
 
@@ -68,7 +78,7 @@ public class BasketService implements BaseService<Basket> {
                 basket.setActive(false);
             }
         }
-        mapper.writerWithDefaultPrettyPrinter().writeValue(file, baskets);
+        FileUtil.write(file,baskets);
     }
 
 }

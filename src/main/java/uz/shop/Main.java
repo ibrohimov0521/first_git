@@ -135,7 +135,7 @@ public class Main {
                     if (basketService.add(basket)) {
                         System.out.println("Successfully added in basket");
                         product.setAmount(product.getAmount() - i);
-                        productService.rewrite();
+                        // rewrite bor edi
                     } else {
                         System.out.println("Failed to add in basket");
                     }

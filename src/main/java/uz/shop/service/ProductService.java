@@ -89,7 +89,7 @@ public class ProductService implements BaseService<Product> {
                 product1.setPrice(product.getPrice());
                 product1.setDescription(product.getDescription());
                 product1.setAmount(product.getAmount());
-                mapper.writerWithDefaultPrettyPrinter().writeValue(file, products);
+                FileUtil.write(file,products);
                 return true;
             }
         }

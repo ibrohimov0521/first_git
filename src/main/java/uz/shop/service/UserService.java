@@ -68,7 +68,7 @@ public class UserService implements BaseService<User> {
                 u.setUserName(user.getUserName());
                 u.setPassword(user.getPassword());
                 u.setRole(user.getRole());
-                mapper.writerWithDefaultPrettyPrinter().writeValue(file, users);
+                FileUtil.write(file,users);
                 return true;
             }
         }
