@@ -60,6 +60,7 @@ public class BillService implements BaseService<Bill> {
                 b.setAmount(bill.getAmount());
                 b.setUserId(bill.getUserId());
                 b.setProductId(bill.getProductId());
+                b.setUpdatedDate(bill.getCreatedDate());
                 FileUtil.write(file,bills);
                 return true;
             }

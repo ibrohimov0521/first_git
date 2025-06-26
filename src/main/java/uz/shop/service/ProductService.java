@@ -85,6 +85,7 @@ public class ProductService implements BaseService<Product> {
                 product1.setPrice(product.getPrice());
                 product1.setDescription(product.getDescription());
                 product1.setAmount(product.getAmount());
+                product1.setUpdatedDate(product.getCreatedDate());
                 FileUtil.write(file, products);
                 return true;
             }

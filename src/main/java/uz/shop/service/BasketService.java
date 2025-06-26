@@ -61,6 +61,7 @@ public class BasketService implements BaseService<Basket> {
                 b.setAmount(basket.getAmount());
                 b.setUserId(basket.getUserId());
                 b.setProductId(basket.getProductId());
+                b.setUpdatedDate(basket.getCreatedDate());
                 FileUtil.write(file,baskets);
                 return true;
             }

@@ -13,6 +13,7 @@ import java.util.*;
 public abstract class Base {
     private UUID id;
     private String createdDate;
+    private String updatedDate;
     private UUID createdBy;
     private boolean active;
 
