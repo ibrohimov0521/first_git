@@ -55,6 +55,16 @@ public class BillService implements BaseService<Bill> {
 
     @Override
     public boolean update(Bill bill, UUID id) {
+        for (Bill b : bills) {
+            if (b != null && b.getId().equals(id) && b.isActive()) {
+                b.setAmount(bill.getAmount());
+                b.setUserId(bill.getUserId());
+                b.setProductId(bill.getProductId());
+                b.setUpdatedDate(bill.getCreatedDate());
+                FileUtil.write(file,bills);
+                return true;
+            }
+        }
         return false;
     }
 

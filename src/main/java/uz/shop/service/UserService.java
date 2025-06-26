@@ -65,6 +65,7 @@ public class UserService implements BaseService<User> {
                 u.setUserName(user.getUserName());
                 u.setPassword(user.getPassword());
                 u.setRole(user.getRole());
+                u.setUpdatedDate(user.getCreatedDate());
                 FileUtil.write(file,users);
                 return true;
             }

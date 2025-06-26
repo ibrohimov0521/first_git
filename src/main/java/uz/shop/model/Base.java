@@ -2,20 +2,27 @@ package uz.shop.model;
 
 import lombok.Data;
 
+import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.util.Objects;
-import java.util.UUID;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @Data
 public abstract class Base {
     private UUID id;
     private String createdDate;
+    private String updatedDate;
     private UUID createdBy;
     private boolean active;
 
+
+
     public Base() {
         this.id = UUID.randomUUID();
-        this.createdDate = String.valueOf(Instant.now());
+        LocalDateTime vaqt = LocalDateTime.now(ZoneId.of("Asia/Tashkent"));
+        this.createdDate = vaqt.format(DateTimeFormatter.ofPattern(" EEEE yyyy-MM-dd HH:mm:ss"));
         this.active = true;
     }
 

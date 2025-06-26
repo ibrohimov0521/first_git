@@ -86,6 +86,7 @@ public class CategoryService implements BaseService<Category> {
                 c.setLastCategory(category.isLastCategory());
                 c.setParentId(category.getParentId());
                 c.setActive(category.isActive());
+                c.setUpdatedDate(category.getCreatedDate());
                 FileUtil.write(file,categories);
                 return true;
             }
