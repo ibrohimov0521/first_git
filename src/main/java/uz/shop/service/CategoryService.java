@@ -7,109 +7,101 @@ import uz.shop.model.Category;
 
 import java.io.File;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class CategoryService implements BaseService<Category> {
-    ObjectMapper mapper = new ObjectMapper();
-    File file = new File("src/main/resources/category.json");
-    private List<Category> categories;
+
+    private final ObjectMapper mapper = new ObjectMapper();
+    private final File path = new File("src/main/resources/category.json");
+    private List<Category> categories = new ArrayList<>();
 
     public CategoryService() {
-        categories = new ArrayList<>();
-        rewrite();
+        readFromFile();
     }
 
     @Override
-    public Category findById(UUID id) {
-        rewrite();
-        for (Category c : categories) {
-            if (c.isActive() && c.getId().equals(id)) {
-                return c;
-            }
-        }
-        return null;
+    public Category getById(UUID id) {
+        readFromFile();
+        return categories.stream()
+                .filter(c -> c.isActive() && c.getId().equals(id))
+                .findFirst()
+                .orElse(null);
     }
 
-    public Category findName(String name) {
-        rewrite();
-        for (Category c : categories) {
-            if (c.isActive() && c.getName().equals(name)) {
-                return c;
-            }
-        }
-        return null;
+    public Category getName(String name) {
+        readFromFile();
+        return categories.stream()
+                .filter(c -> c.isActive() && c.getName().equals(name))
+                .findFirst()
+                .orElse(null);
     }
 
     public List<Category> findNonParent() {
-        rewrite();
-        List<Category> categories1 = new ArrayList<>();
-        for (Category c : categories) {
-            if (c.isActive() && c.getParentId() == null) {
-                categories1.add(c);
-            }
-        }
-        return categories1;
+        readFromFile();
+        return categories.stream()
+                .filter(c -> c.isActive() && c.getParentId() == null)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<Category> findAll() {
-        rewrite();
+    public List<Category> getAll() {
+        readFromFile();
         return categories;
     }
 
     public List<Category> findAllByParentId(UUID parentId) {
-        rewrite();
-        List<Category> categories = new ArrayList<>();
-        for (Category c : this.categories) {
-            if ( c.isActive() && parentId != null && parentId.equals(c.getParentId())) {
-                categories.add(c);
-            }
-        }
-        return categories;
+        readFromFile();
+        return categories.stream()
+                .filter(c -> c.isActive() && Objects.equals(c.getParentId(), parentId))
+                .collect(Collectors.toList());
     }
-
-
 
     @SneakyThrows
     @Override
     public boolean add(Category category) {
-        rewrite();
-        for (Category c : categories) {
-            if (c.getName().equals(category.getName())) {
-                return false;
-            }
-        }
+        readFromFile();
+        boolean exists = categories.stream()
+                .anyMatch(c -> c.getName().equals(category.getName()));
+        if (exists) return false;
+
         categories.add(category);
-        mapper.writerWithDefaultPrettyPrinter().writeValue(file, categories);
+        saveToFile();
         return true;
     }
 
     @SneakyThrows
     @Override
     public boolean update(Category category, UUID id) {
-        rewrite();
-        for (Category c : categories) {
-            if (c.isActive() && c.getId().equals(id)){
-                c.setName(category.getName());
-                c.setLastCategory(category.isLastCategory());
-                c.setParentId(category.getParentId());
-                c.setActive(category.isActive());
-                mapper.writerWithDefaultPrettyPrinter().writeValue(file, categories);
-                return true;
-            }
+        readFromFile();
+        Optional<Category> optionalCategory = categories.stream()
+                .filter(c -> c.isActive() && c.getId().equals(id))
+                .findFirst();
+
+        if (optionalCategory.isPresent()) {
+            Category c = optionalCategory.get();
+            c.setName(category.getName());
+            c.setLastCategory(category.isLastCategory());
+            c.setParentId(category.getParentId());
+            c.setActive(category.isActive());
+            saveToFile();
+            return true;
         }
         return false;
     }
 
     @SneakyThrows
     @Override
-    public void rewrite() {
-        if (!file.exists() || file.length() == 0) {
-            Files.writeString(file.toPath(), "[]");
+    public void readFromFile() {
+        if (!path.exists() || path.length() == 0) {
+            Files.writeString(path.toPath(), "[]");
         }
-        categories = mapper.readValue(file, new TypeReference<>() {
-        });
+        categories = mapper.readValue(path, new TypeReference<List<Category>>() {});
+    }
+
+    @SneakyThrows
+    @Override
+    public void saveToFile() {
+        mapper.writerWithDefaultPrettyPrinter().writeValue(path, categories);
     }
 }

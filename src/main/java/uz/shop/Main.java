@@ -14,7 +14,7 @@ public class Main {
     public static User currentUser = new User();
     public static CategoryService categoryService = new CategoryService();
     public static ProductService productService = new ProductService();
-    public static BasketService basketService = new BasketService();
+    public static CardService basketService = new CardService();
     public static BillService billService = new BillService();
 
     public static void main(String[] args) {
@@ -35,14 +35,14 @@ public class Main {
                 case 1 -> registerUser();
                 case 2 -> {
                     if (login()) {
-                        System.out.println("Logged in successfully\n");
+                        System.out.println("Logged successfully!\n");
                         if (currentUser.getRole().equals(Role.ADMIN)) {
                             adminMenu();
                         } else {
                             userMenu();
                         }
                     }
-                    System.out.println("Invalid username or password");
+                    System.out.println("Invalid phone number or password");
                 }
             }
         }
@@ -50,13 +50,15 @@ public class Main {
 
     public static void registerUser() {
         User newUser = new User();
-        System.out.println("Enter username: ");
-        newUser.setUserName(scStr.nextLine());
+        System.out.println("Enter you fullName");
+        newUser.setFullName(scStr.nextLine());
+        System.out.println("Enter your phone number");
+        newUser.setPhoneNumber(scStr.nextLine());
         System.out.println("Enter password: ");
         newUser.setPassword(scStr.nextLine());
-        System.out.println("Enter confirm password: ");
-        String confirmPassword = scStr.nextLine();
-        if (confirmPassword.equals(newUser.getPassword())) {
+        System.out.println("Confirm your password: ");
+        String confirmedPassword = scStr.nextLine();
+        if (confirmedPassword.equals(newUser.getPassword())) {
             userService.add(newUser);
             return;
         }
@@ -64,20 +66,20 @@ public class Main {
     }
 
     public static boolean login() {
-        System.out.println("Enter username: ");
-        String username = scStr.nextLine();
+        System.out.println("Enter phone: ");
+        String phone = scStr.nextLine();
         System.out.println("Enter password: ");
         String password = scStr.nextLine();
-        currentUser = userService.logIn(username, password);
+        currentUser = userService.logIn(phone, password);
         return currentUser != null;
     }
 
     public static void userMenu() {
         int option = 100;
         while (option != 0) {
-            System.out.println(currentUser.getUserName() + " Welcome to the Shop System\n");
+            System.out.println(currentUser.getFullName() + " Welcome to the Shop System\n");
             System.out.println("""
-                    1. Catalogs
+                    1. Catalogues
                     2. Bills
                     3. Basket
                     0. Exit
@@ -90,7 +92,10 @@ public class Main {
                     for (Category category : categories) {
                         System.out.println(i++ + ". " + category);
                     }
-                    System.out.println("Select category:        0. Exit");
+                    System.out.println("""
+                            0. Exit
+                            
+                            Select category: """);
                     i = sc.nextInt();
                     if (i < 1 || i > categories.size()) {
                         return;
@@ -102,10 +107,13 @@ public class Main {
                         for (Category c : categories) {
                             System.out.println(i++ + ". " + c);
                         }
-                        System.out.println("Select category:        0. Exit");
+                        System.out.print("""
+                                0. Exit
+                                
+                                Select category: """);
                         i = sc.nextInt();
                         if (i < 1 || i > categories.size()) {
-                            category = categoryService.findById(category.getParentId());
+                            category = categoryService.getById(category.getParentId());
                         } else {
                             category = categories.get(i - 1);
                         }
@@ -127,7 +135,7 @@ public class Main {
                     if (i < 1 || i > product.getAmount()) {
                         return;
                     }
-                    Basket basket = new Basket();
+                    Card basket = new Card();
                     basket.setAmount(i);
                     basket.setProductId(product.getId());
                     basket.setUserId(currentUser.getId());
@@ -135,7 +143,7 @@ public class Main {
                     if (basketService.add(basket)) {
                         System.out.println("Successfully added in basket");
                         product.setAmount(product.getAmount() - i);
-                        productService.rewrite();
+                        productService.readFromFile();
                     } else {
                         System.out.println("Failed to add in basket");
                     }
@@ -154,7 +162,7 @@ public class Main {
     public static void adminMenu() {
         int option = 100;
         while (option != 0) {
-            System.out.println(currentUser.getUserName() + " Welcome to the Shop admin System\n");
+            System.out.println(currentUser.getFullName() + " Welcome to the Shop admin System\n");
             System.out.println("""
                     1. Category's
                     2. Products
@@ -166,7 +174,7 @@ public class Main {
                 case 1 -> categoryManu();
                 case 2 -> productManu();
                 case 3 -> {
-                    List<User> users = userService.findAll();
+                    List<User> users = userService.getAll();
                     for (User user : users) {
                         System.out.println(user);
                     }
@@ -207,7 +215,7 @@ public class Main {
                         System.out.println("Select category:        0. Exit");
                         i = sc.nextInt();
                         if (i < 1 || i > categories.size()) {
-                            category = categoryService.findById(category.getParentId());
+                            category = categoryService.getById(category.getParentId());
                         } else {
                             category = categories.get(i - 1);
                         }
@@ -233,7 +241,7 @@ public class Main {
                     switch (sc.nextInt()) {
                         case 1 -> {
                             System.out.println("Enter Name Parent Category");
-                            Category parCategory = categoryService.findName(scStr.nextLine());
+                            Category parCategory = categoryService.getName(scStr.nextLine());
                             newCategory.setParentId(parCategory.getId());
                             newCategory.setLastCategory(true);
                         }
@@ -241,7 +249,7 @@ public class Main {
                         }
                         case 0 -> {
                             System.out.println("Enter Name Parent Category");
-                            Category parCategory = categoryService.findName(scStr.nextLine());
+                            Category parCategory = categoryService.getName(scStr.nextLine());
                             newCategory.setParentId(parCategory.getId());
                         }
                     }
@@ -249,9 +257,9 @@ public class Main {
                 }
                 case 3 -> {
                     System.out.println("Enter category name: ");
-                    Category category = categoryService.findName(scStr.nextLine());
+                    Category category = categoryService.getName(scStr.nextLine());
                     category.setActive(false);
-                    if (categoryService.update(category, category.getId())){
+                    if (categoryService.update(category, category.getId())) {
                         System.out.println("Deleted!!");
                     } else {
                         System.out.println("Error!!");
@@ -273,7 +281,7 @@ public class Main {
             option = sc.nextInt();
             switch (option) {
                 case 1 -> {
-                    List<Product> products = productService.findAll();
+                    List<Product> products = productService.getAll();
                     for (Product product : products) {
                         System.out.println(product);
                     }
@@ -299,7 +307,7 @@ public class Main {
                         System.out.println("Select category:        0. Exit");
                         i = sc.nextInt();
                         if (i < 1 || i > categories.size()) {
-                            category = categoryService.findById(category.getParentId());
+                            category = categoryService.getById(category.getParentId());
                         } else {
                             category = categories.get(i - 1);
                         }
@@ -335,12 +343,12 @@ public class Main {
     public static void basketMenu() {
         int option = 100;
         while (option != 0) {
-            List<Basket> baskets = basketService.findByUserId(currentUser.getId());
-            int i=1;
-            double price =0;
-            for (Basket basket : baskets) {
+            List<Card> baskets = basketService.findByUserId(currentUser.getId());
+            int i = 1;
+            double price = 0;
+            for (Card basket : baskets) {
                 if (basket.isActive()) {
-                    price += productService.findById(basket.getProductId()).getPrice();
+                    price += productService.getById(basket.getProductId()).getPrice();
                     System.out.println(i++ + ". " + basket);
                 }
             }
@@ -353,7 +361,7 @@ public class Main {
             option = sc.nextInt();
             switch (option) {
                 case 1 -> {
-                    for (Basket basket : baskets) {
+                    for (Card basket : baskets) {
                         Bill bill = new Bill();
                         bill.setAmount(basket.getAmount());
                         bill.setProductId(basket.getProductId());
@@ -363,7 +371,7 @@ public class Main {
                     }
                 }
                 case 2 -> {
-                    for (Basket basket : baskets) {
+                    for (Card basket : baskets) {
                         basketService.delete(basket.getId());
                     }
                 }

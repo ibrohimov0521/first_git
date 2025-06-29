@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class Category extends Base {
+public class Category extends BaseModel {
     private String name;
     private UUID parentId;
     private boolean lastCategory;

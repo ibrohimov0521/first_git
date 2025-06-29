@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class Bill extends Base {
+public class Bill extends BaseModel {
     private UUID userId;
     private UUID productId;
     private int amount;

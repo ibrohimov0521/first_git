@@ -6,10 +6,12 @@ import lombok.SneakyThrows;
 import uz.shop.model.Bill;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class BillService implements BaseService<Bill> {
     ObjectMapper mapper = new ObjectMapper();
@@ -18,43 +20,36 @@ public class BillService implements BaseService<Bill> {
 
     public BillService() {
         bills = new ArrayList<>();
-        rewrite();
+        readFromFile();
     }
 
     @Override
-    public Bill findById(UUID id) {
-        rewrite();
-        for (Bill b : bills) {
-            if (b.getId().equals(id)) {
-                return b;
-            }
-        }
-        return null;
+    public Bill getById(UUID id) {
+        return bills.stream()
+                .filter(bill -> bill.getId().equals(id))
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
-    public List<Bill> findAll() {
-        rewrite();
+    public List<Bill> getAll() {
+        readFromFile();
         return bills;
     }
 
     public List<Bill> findByUserId(UUID userId) {
-        rewrite();
-        List<Bill> bills = new ArrayList<>();
-        for (Bill b : this.bills) {
-            if (b.getUserId().equals(userId) && b.isActive()) {
-                bills.add(b);
-            }
-        }
-        return bills;
+        readFromFile();
+        return bills.stream()
+                .filter(bill -> bill.getUserId().equals(userId))
+                .collect(Collectors.toList());
     }
 
     @SneakyThrows
     @Override
     public boolean add(Bill bill) {
-        rewrite();
+        readFromFile();
         bills.add(bill);
-        mapper.writerWithDefaultPrettyPrinter().writeValue(file, bills);
+        saveToFile();
         return true;
     }
 
@@ -65,11 +60,17 @@ public class BillService implements BaseService<Bill> {
 
     @SneakyThrows
     @Override
-    public void rewrite() {
+    public void readFromFile() {
         if (!file.exists() || file.length() == 0) {
             Files.writeString(file.toPath(), "[]");
         }
         bills = mapper.readValue(file, new TypeReference<>() {
         });
+    }
+
+    @Override
+    public void saveToFile() throws IOException {
+        mapper.writerWithDefaultPrettyPrinter().writeValue(file,bills
+        );
     }
 }
