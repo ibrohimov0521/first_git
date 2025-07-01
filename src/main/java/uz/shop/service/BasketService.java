@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class BasketService implements BaseService<Basket> {
     File file = new File("src/main/resources/baskets.json");
@@ -21,7 +22,10 @@ public class BasketService implements BaseService<Basket> {
 
     @Override
     public Basket findById(UUID id) {
-        return null;
+        return baskets.stream()
+                .filter(basket -> basket.getId().equals(id))
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
@@ -30,53 +34,46 @@ public class BasketService implements BaseService<Basket> {
     }
 
     public List<Basket> findByUserId(UUID userId) {
-        List<Basket> baskets1 =  new ArrayList<>();
-        for (Basket b : this.baskets) {
-            if (b.isActive() && b.getUserId().equals(userId)){
-                baskets1.add(b);
-            }
-        }
-        return baskets1;
+        return baskets.stream()
+                .filter(basket -> basket.getUserId().equals(userId))
+                .collect(Collectors.toList());
     }
 
     @SneakyThrows
     @Override
     public boolean add(Basket basket) {
-        for (Basket b : baskets) {
-            if (b.getProductId().equals(basket.getProductId()) && b.isActive()) {
-                b.setAmount(b.getAmount() + basket.getAmount());
-                FileUtil.write(file,baskets);
-                return true;
-            }
+
+        boolean isBasket = baskets.stream()
+                .anyMatch(b -> b.getProductId().equals(basket.getProductId()) && b.isActive());
+
+        if (!isBasket) {
+            return false;
         }
         baskets.add(basket);
-        FileUtil.write(file,baskets);
+        FileUtil.write(file, baskets);
         return true;
     }
 
     @Override
     public boolean update(Basket basket, UUID id) {
-        for (Basket b : baskets) {
-            if (b != null && b.getId().equals(id) && b.isActive()) {
-                b.setAmount(basket.getAmount());
-                b.setUserId(basket.getUserId());
-                b.setProductId(basket.getProductId());
-                b.setUpdatedDate(basket.getCreatedDate());
-                FileUtil.write(file,baskets);
-                return true;
-            }
+        Basket b = findById(id);
+        if (b != null) {
+            b.setAmount(basket.getAmount());
+            b.setUserId(basket.getUserId());
+            b.setProductId(basket.getProductId());
+            b.setUpdatedDate(basket.getCreatedDate());
+            FileUtil.write(file, baskets);
+            return true;
         }
+
         return false;
     }
 
     @SneakyThrows
-    public void delete (UUID id) {
-        for (Basket basket : baskets) {
-            if (basket.getId().equals(id)) {
-                basket.setActive(false);
-            }
-        }
-        FileUtil.write(file,baskets);
+    public void delete(UUID id) {
+        Basket basket = findById(id);
+        basket.setActive(false);
+        FileUtil.write(file, baskets);
     }
 
 }

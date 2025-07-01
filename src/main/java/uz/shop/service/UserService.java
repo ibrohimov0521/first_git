@@ -29,10 +29,10 @@ public class UserService implements BaseService<User> {
     @Override
     public User findById(UUID id) {
 
-        for (User user : users) {
-            if ( user.getId().equals(id)) {
-                return user;
-            }
+        User currentUser = users.stream().filter(user -> user.getId().equals(id)).findFirst().orElse(null);
+
+        if (currentUser != null) {
+            return currentUser;
         }
         return null;
     }
@@ -46,42 +46,43 @@ public class UserService implements BaseService<User> {
     @Override
     public boolean add(User user) {
 
-        for (User user1 : users) {
-            if (user1.getUserName().equals(user.getUserName())) {
-                return false;
-            }
+        boolean isUser = users.stream().anyMatch(u -> u.getUserName().equals(user.getUserName()));
+
+        if (!isUser) {
+            return false;
         }
+
         users.add(user);
-        FileUtil.write(file,users);
+        FileUtil.write(file, users);
         return true;
     }
 
     @SneakyThrows
     @Override
     public boolean update(User user, UUID id) {
+        User u = findById(id);
 
-        for (User u : users) {
-            if (u.getId().equals(id)) {
-                u.setUserName(user.getUserName());
-                u.setPassword(user.getPassword());
-                u.setRole(user.getRole());
-                u.setUpdatedDate(user.getCreatedDate());
-                FileUtil.write(file,users);
-                return true;
-            }
+        if (u != null) {
+            u.setUserName(user.getUserName());
+            u.setPassword(user.getPassword());
+            u.setRole(user.getRole());
+            u.setUpdatedDate(user.getCreatedDate());
+            FileUtil.write(file, users);
+            return true;
         }
+
         return false;
     }
 
 
+    public User logIn(String username, String password) {
 
-    public User logIn (String username, String password) {
+        User nowUser = users.stream().filter(user -> user.getUserName().equals(username) && user.getPassword().equals(password)).findFirst().orElse(null);
 
-        for (User user : users) {
-            if (user.getUserName().equals(username) && user.getPassword().equals(password)) {
-                return user;
-            }
+        if (nowUser != null) {
+            return nowUser;
         }
+
         return null;
     }
 }

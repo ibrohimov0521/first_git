@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class CategoryService implements BaseService<Category> {
     File file = new File("src/main/resources/category.json");
@@ -20,31 +21,24 @@ public class CategoryService implements BaseService<Category> {
 
     @Override
     public Category findById(UUID id) {
-        for (Category c : categories) {
-            if (c.isActive() && c.getId().equals(id)) {
-                return c;
-            }
-        }
-        return null;
+
+        return categories.stream()
+                .filter(category -> category.getId().equals(id))
+                .findFirst()
+                .orElse(null);
     }
 
     public Category findName(String name) {
-        for (Category c : categories) {
-            if (c.isActive() && c.getName().equals(name)) {
-                return c;
-            }
-        }
-        return null;
+        return categories.stream()
+                .filter(category -> category.getName().equals(name))
+                .findFirst()
+                .orElse(null);
     }
 
     public List<Category> findNonParent() {
-        List<Category> categories1 = new ArrayList<>();
-        for (Category c : categories) {
-            if (c.isActive() && c.getParentId() == null) {
-                categories1.add(c);
-            }
-        }
-        return categories1;
+        return categories.stream()
+                .filter(c -> c.isActive() && c.getParentId() == null)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -53,44 +47,40 @@ public class CategoryService implements BaseService<Category> {
     }
 
     public List<Category> findAllByParentId(UUID parentId) {
+        return categories.stream().filter(category -> category.getParentId() != null &&
+                        category.getParentId().equals(parentId) &&
+                        category.isActive())
+                .collect(Collectors.toList());
 
-        List<Category> categories = new ArrayList<>();
-        for (Category c : this.categories) {
-            if ( c.isActive() && parentId != null && parentId.equals(c.getParentId())) {
-                categories.add(c);
-            }
-        }
-        return categories;
     }
 
     @SneakyThrows
     @Override
     public boolean add(Category category) {
-        for (Category c : categories) {
-            if (c.getName().equals(category.getName())) {
-                return false;
-            }
+        boolean isCategory = categories.stream()
+                .anyMatch(c -> c.getName().equals(category.getName()));
+        if (!isCategory) {
+            return false;
         }
-
         categories.add(category);
-        FileUtil.write(file,categories);
+        FileUtil.write(file, categories);
         return true;
     }
 
     @SneakyThrows
     @Override
     public boolean update(Category category, UUID id) {
-        for (Category c : categories) {
-            if (c.isActive() && c.getId().equals(id)){
-                c.setName(category.getName());
-                c.setLastCategory(category.isLastCategory());
-                c.setParentId(category.getParentId());
-                c.setActive(category.isActive());
-                c.setUpdatedDate(category.getCreatedDate());
-                FileUtil.write(file,categories);
-                return true;
-            }
+        Category c = findById(id);
+        if (c != null) {
+            c.setName(category.getName());
+            c.setLastCategory(category.isLastCategory());
+            c.setParentId(category.getParentId());
+            c.setActive(category.isActive());
+            c.setUpdatedDate(category.getCreatedDate());
+            FileUtil.write(file, categories);
+            return true;
         }
+
         return false;
     }
 
