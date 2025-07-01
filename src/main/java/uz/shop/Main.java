@@ -4,7 +4,8 @@ import uz.shop.model.*;
 import uz.shop.role.Role;
 import uz.shop.service.*;
 
-import java.util.*;
+import java.util.List;
+import java.util.Scanner;
 
 public class Main {
     public static Scanner sc = new Scanner(System.in);
@@ -134,7 +135,7 @@ public class Main {
                     if (basketService.add(basket)) {
                         System.out.println("Successfully added in basket");
                         product.setAmount(product.getAmount() - i);
-                        productService.update(product, product.getId());
+                        //productService.rewrite();
                     } else {
                         System.out.println("Failed to add in basket");
                     }
@@ -250,7 +251,7 @@ public class Main {
                     System.out.println("Enter category name: ");
                     Category category = categoryService.findName(scStr.nextLine());
                     category.setActive(false);
-                    if (categoryService.update(category, category.getId())) {
+                    if (categoryService.update(category, category.getId())){
                         System.out.println("Deleted!!");
                     } else {
                         System.out.println("Error!!");
@@ -335,8 +336,8 @@ public class Main {
         int option = 100;
         while (option != 0) {
             List<Basket> baskets = basketService.findByUserId(currentUser.getId());
-            int i = 1;
-            double price = 0;
+            int i=1;
+            double price =0;
             for (Basket basket : baskets) {
                 if (basket.isActive()) {
                     price += productService.findById(basket.getProductId()).getPrice();
